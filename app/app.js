@@ -1,21 +1,31 @@
 const express = require("express");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const app = express();
-const loginRoutes = require("./routes/login");
-const userRoutes = require("./routes/user");
 const { authenticateToken } = require("./middlewares/authMiddleware");
+
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const managementRoutes = require("./routes/management");
 
 const connectToDatabase = require("./config/database");
 
 require("dotenv").config();
 
-app.use(express.json());
-app.use(cookieParser());
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with the appropriate client origin
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
-app.use("/api", loginRoutes);
+app.use("/api", authRoutes);
 app.use("/api", authenticateToken, userRoutes);
+app.use("/api/management", authenticateToken, managementRoutes);
 
 connectToDatabase()
   .then(() => {

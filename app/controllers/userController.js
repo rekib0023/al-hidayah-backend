@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const userController = {
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find();
+      const users = await User.find({}, { password: 0 });
       res.json(users);
     } catch (error) {
       console.log(error);
@@ -15,7 +15,7 @@ const userController = {
     const { id } = req.params;
 
     try {
-      const user = await User.findById(id);
+      const user = await User.findById(id).select("-password");
       if (user) {
         res.json(user);
       } else {
@@ -53,7 +53,6 @@ const userController = {
       res.status(500).json({ message: "An error occurred" });
     }
   },
-
   updateUser: async (req, res) => {
     const { id } = req.params;
     const { name, email, password, dob, address, phone, type } = req.body;

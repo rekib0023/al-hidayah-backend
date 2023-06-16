@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { UserType } = require("../utils/constants");
 
 function authenticateToken(req, res, next) {
   const token = req.cookies.token;
@@ -19,17 +18,21 @@ function authenticateToken(req, res, next) {
   });
 }
 
-function authenticateManagement(req, res, next) {
-  const token = req.cookies.token;
+function checkPermissions(requiredUserTypes) {
+  return function (req, res, next) {
+    const userType = req.user.type;
 
-  jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-    if (decoded.type !== UserType.MANAGEMENT) {
+    const hasPermissions = requiredUserTypes.includes(userType);
+
+    if (!hasPermissions) {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    req.user = decoded;
     next();
-  });
+  };
 }
 
-module.exports = { authenticateToken, authenticateManagement };
+module.exports = {
+  authenticateToken,
+  checkPermissions,
+};
