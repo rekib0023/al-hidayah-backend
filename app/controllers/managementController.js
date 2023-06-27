@@ -7,15 +7,9 @@ const { UserType } = require("../utils/constants");
 
 const ManagementController = {
   uploadStudents: async (req, res, next) => {
-    console.log("a");
-    const params = {
-      Bucket: "al-hidayah-bucket",
-      Key: req.file.key,
-    };
     const rollNumberCount = {};
     try {
-      const data = await s3.getObject(params).promise();
-      const workbook = XLSX.read(data.Body, { type: "buffer" });
+      const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
@@ -24,8 +18,8 @@ const ManagementController = {
 
       for (const row of jsonData) {
         const {
-          firstName = "Unknown",
-          lastName = "Unknown",
+          firstName = "",
+          lastName = "",
           email = "",
           dob = "",
           address = "",
@@ -62,7 +56,7 @@ const ManagementController = {
       }
 
       await User.insertMany(users);
-      await Student.insertMany(updatedStudents);
+      await Student.insertMany(students);
 
       res.json({ message: "File uploaded successfully" });
     } catch (error) {
@@ -79,7 +73,7 @@ const ManagementController = {
       return rollNumberCount[classN];
     }
   },
-  createStudent: async (req, res) => {
+  createStudent: async (req, res) => {a
     const {
       firstName,
       lastName,
@@ -143,14 +137,14 @@ const ManagementController = {
       Student.find(query)
         .populate("user", "-password")
         .then((students) => {
-          let studentsData = {};
-          students.forEach((student) => {
-            if (!studentsData[student.class]) {
-              studentsData[student.class] = [];
-            }
-            studentsData[student.class].push(student);
-          });
-          res.json(studentsData);
+          // let studentsData = {};
+          // students.forEach((student) => {
+          //   if (!studentsData[student.class]) {
+          //     studentsData[student.class] = [];
+          //   }
+          //   studentsData[student.class].push(student);
+          // });
+          res.json(students);
         })
         .catch((err) => {
           console.error("Error retrieving students:", err);

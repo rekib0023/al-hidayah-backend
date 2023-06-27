@@ -7,15 +7,19 @@ const s3 = new aws.S3({
   s3ForcePathStyle: true,
 });
 
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: "al-hidayah-bucket",
+//     acl: "public-read",
+//     key: function (req, file, cb) {
+//       cb(null, Date.now().toString()); // Set the file name to be a timestamp
+//     },
+//   }),
+// });
+
 const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: "al-hidayah-bucket",
-    acl: "public-read",
-    key: function (req, file, cb) {
-      cb(null, Date.now().toString()); // Set the file name to be a timestamp
-    },
-  }),
+  storage: multer.memoryStorage()
 });
 
 module.exports = { upload, s3 };
