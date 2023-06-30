@@ -8,6 +8,7 @@ const { authenticateToken } = require("./middlewares/authMiddleware");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const managementRoutes = require("./routes/management");
+const noticeRoutes = require("./routes/notice");
 
 const connectToDatabase = require("./config/database");
 
@@ -17,14 +18,15 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000", // Replace with the appropriate client origin
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
 app.use(cookieParser());
 
 app.use("/api", authRoutes);
-app.use("/api", authenticateToken, userRoutes);
+app.use("/api/users", authenticateToken, userRoutes);
+app.use("/api/notices", authenticateToken, noticeRoutes);
 app.use("/api/management", authenticateToken, managementRoutes);
 
 connectToDatabase()

@@ -73,7 +73,7 @@ const ManagementController = {
       return rollNumberCount[classN];
     }
   },
-  createStudent: async (req, res) => {a
+  createStudent: async (req, res) => {
     const {
       firstName,
       lastName,
@@ -122,7 +122,12 @@ const ManagementController = {
     try {
       await user.save();
       await student.save();
-      return res.status(201).json(student);
+      const populatedStudent = await Student.findById(student._id).populate(
+        "user",
+        "-password"
+      );
+
+      return res.status(201).json(populatedStudent);
     } catch (error) {
       console.log("Error while creating user: ", error);
       return res.status(500).json({ message: "Internal server error" });
