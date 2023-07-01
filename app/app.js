@@ -9,6 +9,8 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const managementRoutes = require("./routes/management");
 const noticeRoutes = require("./routes/notice");
+const eventRoutes = require("./routes/event");
+const expenseRoutes = require("./routes/expense");
 
 const connectToDatabase = require("./config/database");
 
@@ -28,6 +30,8 @@ app.use("/api", authRoutes);
 app.use("/api/users", authenticateToken, userRoutes);
 app.use("/api/notices", authenticateToken, noticeRoutes);
 app.use("/api/management", authenticateToken, managementRoutes);
+app.use("/api/events", authenticateToken, eventRoutes);
+app.use("/api/expense", authenticateToken, expenseRoutes);
 
 connectToDatabase()
   .then(() => {

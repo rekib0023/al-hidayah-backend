@@ -30,10 +30,11 @@ const NoticeController = {
       let notices;
       if (showAll === "false") {
         notices = await Notice.find(filters)
+          .sort({ updateAt: -1 })
           .skip(Number(offset))
           .limit(Number(limit));
       } else {
-        notices = await Notice.find(filters);
+        notices = await Notice.find(filters).sort({ updateAt: -1 });
       }
 
       res.json({
@@ -75,7 +76,7 @@ const NoticeController = {
         return res.status(404).json({ error: "Notice not found" });
       }
 
-      res.json({ message: "Notice deleted successfully" });
+      res.status(204).json({ message: "Notice deleted successfully" });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete notice" });
     }
