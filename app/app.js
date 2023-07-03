@@ -31,7 +31,7 @@ app.use("/api/users", authenticateToken, userRoutes);
 app.use("/api/notices", authenticateToken, noticeRoutes);
 app.use("/api/management", authenticateToken, managementRoutes);
 app.use("/api/events", authenticateToken, eventRoutes);
-app.use("/api/expense", authenticateToken, expenseRoutes);
+app.use("/api/expenses", authenticateToken, expenseRoutes);
 
 connectToDatabase()
   .then(() => {

@@ -6,7 +6,7 @@
         "request": "launch",
         "name": "Launch Node.js",
         "program": "${workspaceFolder}/app/app.js",
-        "runtimeExecutable": "/home/coditation/.nvm/versions/node/v18.16.0/bin/node",
+        "runtimeExecutable": "/opt/homebrew/opt/node@14/bin/node",
         "args": [],
         "env": {
           "NODE_ENV": "development"

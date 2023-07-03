@@ -13,21 +13,41 @@ const ExpenseController = {
         },
       ]);
 
-      const expensesMap = new Map();
+      const expensesByTypeMap = {};
 
       for (const expense of expensesByType) {
-        expensesMap.set(expense._id, {
-          totalAmount: expense.totalAmount,
-          data: expense.data,
+        // Sort expense.data by date in ascending order
+        const sortedData = expense.data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateA - dateB;
         });
+
+        expensesByTypeMap[expense._id] = {
+          totalAmount: expense.totalAmount,
+          expense: sortedData,
+        };
       }
 
-      const expenses = Array.from(
-        expensesMap,
-        ([expenseType, expenseData]) => ({
-          [expenseType]: expenseData,
-        })
-      );
+      const expenseTypeOrder = {
+        "Daily Expense": 1,
+        "House Rent": 2,
+        Electricity: 3,
+        Salary: 4,
+      };
+
+      const expenses = Object.keys(expensesByTypeMap).map((expenseType) => ({
+        expenseType,
+        expenseData: expensesByTypeMap[expenseType],
+      }));
+
+      expenses.sort((a, b) => {
+        const expenseTypeA = a.expenseType;
+        const expenseTypeB = b.expenseType;
+        console.log(expenseTypeA, expenseTypeB);
+
+        return expenseTypeOrder[expenseTypeA] - expenseTypeOrder[expenseTypeB];
+      });
 
       res.json(expenses);
     } catch (error) {
