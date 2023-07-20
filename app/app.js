@@ -8,6 +8,14 @@ const { authenticateToken } = require("./middlewares/authMiddleware");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const managementRoutes = require("./routes/management");
+const noticeRoutes = require("./routes/notice");
+const eventRoutes = require("./routes/event");
+const expenseRoutes = require("./routes/expense");
+const inventoryRoutes = require("./routes/inventory");
+const orderRoutes = require("./routes/order");
+const admissionRoutes = require("./routes/admission");
+
+
 
 const connectToDatabase = require("./config/database");
 
@@ -17,15 +25,23 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000", // Replace with the appropriate client origin
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
 app.use(cookieParser());
 
 app.use("/api", authRoutes);
-app.use("/api", authenticateToken, userRoutes);
+app.use("/api/users", authenticateToken, userRoutes);
+app.use("/api/notices", authenticateToken, noticeRoutes);
 app.use("/api/management", authenticateToken, managementRoutes);
+app.use("/api/events", authenticateToken, eventRoutes);
+app.use("/api/expenses", authenticateToken, expenseRoutes);
+app.use("/api/inventory", authenticateToken, inventoryRoutes);
+app.use("/api/order", authenticateToken, orderRoutes);
+app.use("/api/admission", authenticateToken, admissionRoutes);
+
+
 
 connectToDatabase()
   .then(() => {
