@@ -12,4 +12,7 @@ router.post(
 
 router.get("/", expenseController.getAllExpenses);
 
+router.get("/audit", expenseController.getAuditFile);
+
+
 module.exports = router;

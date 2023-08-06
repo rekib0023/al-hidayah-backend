@@ -14,8 +14,7 @@ const expenseRoutes = require("./routes/expense");
 const inventoryRoutes = require("./routes/inventory");
 const orderRoutes = require("./routes/order");
 const admissionRoutes = require("./routes/admission");
-
-
+const academicRoutes = require("./routes/academics");
 
 const connectToDatabase = require("./config/database");
 
@@ -36,12 +35,11 @@ app.use("/api/users", authenticateToken, userRoutes);
 app.use("/api/notices", authenticateToken, noticeRoutes);
 app.use("/api/management", authenticateToken, managementRoutes);
 app.use("/api/events", authenticateToken, eventRoutes);
-app.use("/api/expenses", authenticateToken, expenseRoutes);
+app.use("/api/expenses",authenticateToken, expenseRoutes);
 app.use("/api/inventory", authenticateToken, inventoryRoutes);
 app.use("/api/order", authenticateToken, orderRoutes);
 app.use("/api/admission", authenticateToken, admissionRoutes);
-
-
+app.use("/api/academics", authenticateToken, academicRoutes);
 
 connectToDatabase()
   .then(() => {
