@@ -26,7 +26,7 @@ const authController = {
 
             res.cookie("token", token, { httpOnly: true });
 
-            res.json({ message: "Logged in", data: user });
+            res.json({ message: "Logged in", data: user, token });
           })
           .catch((error) => {
             console.error("Error comparing passwords:", error);
